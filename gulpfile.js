@@ -40,6 +40,7 @@ const gulpUtil = require('gulp-util');
 const header = require('gulp-header');
 const runSequence = require('run-sequence');
 const webpackStream = require('webpack-stream');
+const through2 = require('through2');
 
 const DEVELOPMENT_HEADER = [
   '/**',
@@ -103,6 +104,24 @@ const buildDist = function(opts) {
   });
 };
 
+// for some reason paths to prop-types module are bad so this function fix that
+const fixPropTypesPaths = function() {
+  return through2.obj(function(file, enc, next) {
+    if (!file.isDirectory()) {
+      let contents = String(file.contents);
+
+      contents = contents.replace(/\.\/prop-types/g, 'prop-types');
+
+      if (file.isBuffer() === true) {
+        file.contents = new Buffer(contents);
+      }
+
+      return next(null, file);
+    }
+    next();
+  })
+};
+
 const paths = {
   dist: 'dist',
   entry: 'lib/Relay.js',
@@ -123,6 +142,7 @@ gulp.task('modules', function() {
     .src(paths.src)
     .pipe(babel(babelOptions))
     .pipe(flatten())
+    .pipe(fixPropTypesPaths())
     .pipe(gulp.dest(paths.lib));
 });
 
@@ -169,5 +189,5 @@ gulp.task('watch', function() {
 });
 
 gulp.task('default', function(cb) {
-  runSequence('clean', 'website:check-version', ['dist', 'dist:min'], cb);
+  runSequence('clean', ['dist', 'dist:min'], cb);
 });

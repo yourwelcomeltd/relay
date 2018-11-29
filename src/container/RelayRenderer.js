@@ -18,6 +18,8 @@ const RelayReadyStateRenderer = require('RelayReadyStateRenderer');
 
 const getRelayQueries = require('getRelayQueries');
 
+const PropTypes = require('prop-types');
+
 import type {RelayEnvironmentInterface} from 'RelayEnvironment';
 import type {GarbageCollectionHold} from 'RelayGarbageCollector';
 import type {RelayQuerySet} from 'RelayInternalTypes';
@@ -58,8 +60,6 @@ type State = {
   readyState: ?ComponentReadyState,
   retry: RelayRetryCallback,
 };
-
-const {PropTypes} = React;
 
 const INACTIVE_READY_STATE = {
   aborted: false,

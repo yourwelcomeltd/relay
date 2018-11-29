@@ -16,6 +16,7 @@ const React = require('React');
 const RelayPropTypes = require('RelayPropTypes');
 const RelayRenderer = require('RelayRenderer');
 const RelayStore = require('RelayStore');
+const PropTypes = require('prop-types');
 
 import type {RelayQueryConfigInterface} from 'RelayQueryConfig';
 import type {
@@ -41,8 +42,6 @@ type RootContainerProps = {
   renderLoading?: ?() => React.Element<*>,
   route: RelayQueryConfigInterface,
 };
-
-const {PropTypes} = React;
 
 /**
  * @public
